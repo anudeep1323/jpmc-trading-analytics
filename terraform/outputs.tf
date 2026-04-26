@@ -27,3 +27,8 @@ output "athena_workgroup" {
   description = "Athena workgroup for querying data"
   value       = module.athena.workgroup_name
 }
+
+output "step_functions_state_machine" {
+  description = "Step Functions state machine for daily ETL"
+  value       = module.step_functions.state_machine_name
+}

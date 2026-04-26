@@ -54,3 +54,10 @@ module "athena" {
   project_name = var.project_name
   environment  = var.environment
 }
+
+module "step_functions" {
+  source        = "./modules/step_functions"
+  project_name  = var.project_name
+  environment   = var.environment
+  glue_job_name = module.glue_etl.job_name
+}
