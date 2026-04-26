@@ -1,0 +1,38 @@
+name: Glue Script Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'spark/jobs/**'
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: jpmc-trading-datalake-dev
+
+jobs:
+  deploy-glue-scripts:
+    name: Deploy Glue Scripts
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Upload Glue Scripts to S3
+        run: |
+          aws s3 cp spark/jobs/bronze_to_silver.py \
+            s3://${{ env.S3_BUCKET }}/glue-scripts/bronze_to_silver.py
+      
+      - name: Verify upload
+        run: |
+          aws s3 ls s3://${{ env.S3_BUCKET }}/glue-scripts/

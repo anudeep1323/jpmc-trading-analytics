@@ -1,0 +1,37 @@
+name: Pre-commit Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install black flake8 boto3
+      
+      - name: Run Black (Python formatter)
+        run: |
+          black --check lambda/ scripts/ || true
+      
+      - name: Run Flake8 (Python linter)
+        run: |
+          flake8 lambda/ scripts/ --max-line-length=100 || true
+      
+      - name: Terraform Format
+        uses: hashicorp/setup-terraform@v2
+      
+      - name: Check Terraform formatting
+        working-directory: ./terraform
+        run: terraform fmt -check -recursive || true
