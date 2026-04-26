@@ -61,3 +61,12 @@ module "step_functions" {
   environment   = var.environment
   glue_job_name = module.glue_etl.job_name
 }
+
+module "cloudwatch" {
+  source               = "./modules/cloudwatch"
+  project_name         = var.project_name
+  environment          = var.environment
+  aws_region           = var.aws_region
+  lambda_function_name = module.lambda_processor.function_name
+  alert_email          = "anudeepr5555@gmail.com"  # CHANGE THIS!
+}
