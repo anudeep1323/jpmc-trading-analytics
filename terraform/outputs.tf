@@ -12,3 +12,18 @@ output "lambda_function_name" {
   description = "Lambda function processing Kinesis events"
   value       = module.lambda_processor.function_name
 }
+
+output "glue_job_name" {
+  description = "Glue job for bronze to silver transformation"
+  value       = module.glue_etl.job_name
+}
+
+output "glue_database" {
+  description = "Glue catalog database"
+  value       = module.glue_etl.database_name
+}
+
+output "athena_workgroup" {
+  description = "Athena workgroup for querying data"
+  value       = module.athena.workgroup_name
+}

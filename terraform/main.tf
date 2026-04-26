@@ -40,3 +40,17 @@ module "lambda_processor" {
   s3_bucket_name     = module.s3_data_lake.bucket_name
   s3_bucket_arn      = module.s3_data_lake.bucket_arn
 }
+
+module "glue_etl" {
+  source         = "./modules/glue"
+  project_name   = var.project_name
+  environment    = var.environment
+  s3_bucket_name = module.s3_data_lake.bucket_name
+  s3_bucket_arn  = module.s3_data_lake.bucket_arn
+}
+
+module "athena" {
+  source       = "./modules/athena"
+  project_name = var.project_name
+  environment  = var.environment
+}
