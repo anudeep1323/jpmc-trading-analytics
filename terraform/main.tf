@@ -25,3 +25,18 @@ module "s3_data_lake" {
   environment  = var.environment
   project_name = var.project_name
 }
+
+module "kinesis_streaming" {
+  source       = "./modules/kinesis"
+  environment  = var.environment
+  project_name = var.project_name
+}
+
+module "lambda_processor" {
+  source             = "./modules/lambda"
+  project_name       = var.project_name
+  environment        = var.environment
+  kinesis_stream_arn = module.kinesis_streaming.stream_arn
+  s3_bucket_name     = module.s3_data_lake.bucket_name
+  s3_bucket_arn      = module.s3_data_lake.bucket_arn
+}
